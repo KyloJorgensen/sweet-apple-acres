@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-export {};
-
 // Welcome to Cypress!
 //
 // This spec file contains a variety of sample tests
@@ -19,6 +17,7 @@ describe("example to-do app", () => {
     // so we must tell it to visit our website with the `cy.visit()` command.
     // Since we want to visit the same URL at the start of all our tests,
     // we include it in our beforeEach function so that it runs before each test
+    console.log(process.env);
     cy.visit("http://localhost:8080/");
   });
 
