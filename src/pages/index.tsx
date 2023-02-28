@@ -18,9 +18,20 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           Products
-          <code>
-            {JSON.stringify(products?.data || products.error, null, 2)}
-          </code>
+          {products.error && (
+            <code>{JSON.stringify(products.error, null, 2)}</code>
+          )}
+          {products?.data?.map((product, index) => (
+            <div key={`${product.id}-${index}`}>
+              <code>{JSON.stringify(product, null, 2)}</code>
+              <img
+                src={product?.image || ""}
+                alt={product.description}
+                width="100px"
+                height="100px"
+              />
+            </div>
+          ))}
         </div>
       </main>
     </>
