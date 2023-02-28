@@ -40,11 +40,24 @@ export const productRouter = createTRPCRouter({
 
       const response = await fetch(url);
       console.log(response);
-      const data = await response.json();
-      console.log(data);
-      return {
-        data,
-        greeting: `Hello`,
+      const zProductObject = {
+        id: z.string(),
+        name: z.string(),
+        description: z.string(),
+        image: z.string(),
+        price: z.number(),
+        rating: z.number(),
+        isAvailable: z.boolean(),
       };
+      const zData = z.array(
+        z.object({
+          ...zProductObject,
+          releated: z.array(z.object(zProductObject)),
+        })
+      );
+      const data = zData.parse(await response.json());
+
+      console.log(data);
+      return data;
     }),
 });

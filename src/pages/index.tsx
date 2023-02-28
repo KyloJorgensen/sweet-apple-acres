@@ -19,7 +19,7 @@ const Home: NextPage = () => {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           Products
           <code>
-            {JSON.stringify(products?.data?.data || products.error, null, 2)}
+            {JSON.stringify(products?.data || products.error, null, 2)}
           </code>
         </div>
       </main>
