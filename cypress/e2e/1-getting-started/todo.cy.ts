@@ -18,7 +18,7 @@ describe("example to-do app", () => {
     // Since we want to visit the same URL at the start of all our tests,
     // we include it in our beforeEach function so that it runs before each test
     console.log(process.env);
-    cy.visit("http://localhost:8080/");
+    cy.visit("/");
   });
 
   it("basic", () => {
