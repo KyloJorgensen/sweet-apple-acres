@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const products = api.product.getProducts.useQuery({});
 
   return (
     <>
@@ -17,7 +18,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           Products
-          <ui></ui>
+          <code>{JSON.stringify(products.data.data, null, 2)}</code>
         </div>
       </main>
     </>
