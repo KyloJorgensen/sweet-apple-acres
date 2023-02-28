@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+export {};
+
 // Welcome to Cypress!
 //
 // This spec file contains a variety of sample tests
