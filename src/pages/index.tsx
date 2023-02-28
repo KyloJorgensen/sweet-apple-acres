@@ -18,7 +18,9 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           Products
-          <code>{JSON.stringify(products.data.data, null, 2)}</code>
+          <code>
+            {JSON.stringify(products?.data?.data || products.error, null, 2)}
+          </code>
         </div>
       </main>
     </>
