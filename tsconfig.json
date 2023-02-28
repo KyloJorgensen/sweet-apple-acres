@@ -19,7 +19,8 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
-    }
+    },
+    "rootDirs": ["./cypress/"]
   },
   "include": [
     ".eslintrc.cjs",
@@ -29,5 +30,5 @@
     "**/*.cjs",
     "**/*.mjs"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "./cypress/"]
 }
