@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 export interface AppContextValue {
-  cartProducts: Record<string, { id: string; qty: number }>;
+  cartProducts: Record<string, { id: string; quantity: number }>;
 }
 
 const defaultState = { cartProducts: {} };

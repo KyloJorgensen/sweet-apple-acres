@@ -5,7 +5,13 @@ const ProductQtyController: React.FC<{
   className?: string;
   productId: string;
   isAvailable?: boolean;
-}> = ({ className = "", productId, isAvailable = true }) => {
+  hideAddToCart?: boolean;
+}> = ({
+  className = "",
+  productId,
+  isAvailable = true,
+  hideAddToCart = false,
+}) => {
   const appContext = useAppContext();
 
   const setCartProduct = (qty: number) => {
@@ -15,7 +21,7 @@ const ProductQtyController: React.FC<{
         state.cartProducts[productId] = {
           ...state?.cartProducts?.[productId],
           id: productId,
-          qty,
+          quantity: qty,
         };
       } else if ((!qty || qty <= 0) && state?.cartProducts?.[productId]) {
         delete state.cartProducts[productId];
@@ -26,7 +32,7 @@ const ProductQtyController: React.FC<{
   };
 
   const productQty =
-    appContext?.sharedState?.cartProducts?.[productId]?.qty || 0;
+    appContext?.sharedState?.cartProducts?.[productId]?.quantity || 0;
 
   return (
     <div
@@ -53,19 +59,20 @@ const ProductQtyController: React.FC<{
       >
         +
       </button>
-      {productQty === 0 ? (
-        <button
-          className="z-10"
-          onClick={() => {
-            setCartProduct(productQty + 1);
-          }}
-          disabled={!isAvailable}
-        >
-          Add to Cart
-        </button>
-      ) : (
-        <Link href="/checkout">View Cart</Link>
-      )}
+      {!hideAddToCart &&
+        (productQty === 0 ? (
+          <button
+            className="z-10"
+            onClick={() => {
+              setCartProduct(productQty + 1);
+            }}
+            disabled={!isAvailable}
+          >
+            Add to Cart
+          </button>
+        ) : (
+          <Link href="/checkout">View Cart</Link>
+        ))}
     </div>
   );
 };
