@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FiveStarRating from "~/components/FiveStarRating";
 import ProductQtyController from "~/components/ProductQtyController";
+import Nav from "~/components/Nav";
 import { api } from "~/utils/api";
 
 const ProductList: React.FC = () => {
@@ -20,7 +21,9 @@ const ProductList: React.FC = () => {
                 alt={product.description}
                 width={200}
                 height={200}
-                className="px-4 pb-6"
+                className={`px-4 pb-6 ${
+                  product.isAvailable ? "" : "opacity-30"
+                }`}
               />
               <p className="pb-4">${Number(product.price).toFixed(2)} /ea</p>
               <p className="pb-4 font-bold">{product.name}</p>
@@ -29,9 +32,22 @@ const ProductList: React.FC = () => {
                 <p>{product.rating}</p>
               </div>
             </Link>
-            <ProductQtyController className="pb-4" productId={product.id} />
-            <p className="pb-4">{product.description}</p>
-            {/* <p>{product.isAvailable}</p> */}
+            <ProductQtyController
+              className={`pb-4 ${product.isAvailable ? "" : "opacity-30"}`}
+              productId={product.id}
+              isAvailable={product.isAvailable}
+            />
+            <p className="pb-4">
+              {product.isAvailable ? (
+                ""
+              ) : (
+                <>
+                  <span className="font-bold text-red-600">Unavailable</span>
+                  <br />
+                </>
+              )}
+              {product.description}
+            </p>
           </div>
         ))}
       </div>
@@ -47,13 +63,9 @@ const Home: NextPage = () => {
         <meta name="description" content="🍎 Sweet Apple Acres" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col">
-        <div className="container px-4 py-6">
-          <Link href="/">
-            <p className="text-3xl font-bold">🍎 Sweet Apple Acres</p>
-          </Link>
-        </div>
-        <div className="container flex flex-col justify-center gap-12 px-4 pt-16">
+      <main className="flex min-h-screen flex-col ">
+        <Nav />
+        <div className="mx-auto flex w-4/5 flex-col justify-center gap-12 px-4 pt-16">
           <h2 className="text-2xl font-bold">Products</h2>
           <ProductList />
         </div>
