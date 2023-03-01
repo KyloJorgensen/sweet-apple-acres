@@ -1,12 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import ProductQtyController from "~/components/ProductQtyController";
 import Nav from "~/components/Nav";
-import { api } from "~/utils/api";
-import { useAppContext } from "~/context/state";
-import { useState } from "react";
 
 const Home: NextPage = () => {
   return (
