@@ -20,5 +20,9 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ["sweet-apple-acres.netlify.app"],
+    formats: ["image/avif", "image/webp"],
+  },
 };
 export default config;
