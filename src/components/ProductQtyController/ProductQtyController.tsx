@@ -14,16 +14,19 @@ const ProductQtyController: React.FC<{
 }) => {
   const appContext = useAppContext();
 
-  const setCartProduct = (qty: number) => {
+  const setCartProduct = (quantity: number) => {
     appContext.setSharedState?.((state) => {
-      if (typeof qty === "number" && qty > 0) {
+      if (typeof quantity === "number" && quantity > 0) {
         state.cartProducts = state.cartProducts || {};
         state.cartProducts[productId] = {
           ...state?.cartProducts?.[productId],
-          id: productId,
-          quantity: qty,
+          productId,
+          quantity,
         };
-      } else if ((!qty || qty <= 0) && state?.cartProducts?.[productId]) {
+      } else if (
+        (!quantity || quantity <= 0) &&
+        state?.cartProducts?.[productId]
+      ) {
         delete state.cartProducts[productId];
       }
 

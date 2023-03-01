@@ -1,8 +1,11 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Nav from "~/components/Nav";
 
-const Home: NextPage = () => {
+const CheckoutConfirmation: NextPage = () => {
+  const router = useRouter();
+  const orderId = router.query.orderId;
   return (
     <>
       <Head>
@@ -17,6 +20,7 @@ const Home: NextPage = () => {
 
           <div className="flex flex-col flex-wrap justify-center gap-12 px-4">
             <p>Thanks for your order!</p>
+            {orderId && <p>Order Id: {orderId}</p>}
           </div>
         </div>
       </main>
@@ -24,4 +28,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default CheckoutConfirmation;

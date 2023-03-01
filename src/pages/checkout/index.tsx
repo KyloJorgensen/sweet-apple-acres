@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import ProductQtyController from "~/components/ProductQtyController";
 import Nav from "~/components/Nav";
 import { api } from "~/utils/api";
@@ -9,11 +10,13 @@ import { useAppContext } from "~/context/state";
 import { useState } from "react";
 
 const Checkout: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const appContext = useAppContext();
   const productsQuery = api.product.getProducts.useQuery({});
+  const placeOrderMutation = api.order.placeOrder.useMutation({});
+  const router = useRouter();
 
   const products =
     productsQuery?.data?.filter?.(
@@ -30,6 +33,29 @@ const Checkout: React.FC = () => {
         (appContext?.sharedState?.cartProducts?.[product?.id]?.quantity || 0),
     0
   );
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await placeOrderMutation.mutateAsync({
+        name,
+        deliveryAddress,
+        items: Object.entries(appContext?.sharedState?.cartProducts || {}).map(
+          ([productId, { quantity }]) => ({ productId, quantity })
+        ),
+      });
+
+      console.log(response);
+      const query = new URLSearchParams({ orderId: response.id }).toString();
+      appContext?.setSharedState?.((state) => ({ ...state, cartProducts: {} }));
+      await router.push(`/checkout/confirmation?${query}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const totalCartQty = Object.values(
     appContext.sharedState.cartProducts
@@ -86,7 +112,8 @@ const Checkout: React.FC = () => {
               $
               {Number(
                 product.price *
-                  appContext?.sharedState?.cartProducts?.[product?.id]?.quantity
+                  (appContext?.sharedState?.cartProducts?.[product?.id]
+                    ?.quantity || 0)
               ).toFixed(2)}
             </p>
           </div>
@@ -99,13 +126,7 @@ const Checkout: React.FC = () => {
         className="flex flex-col gap-12"
         onSubmit={(e) => {
           e.preventDefault();
-          try {
-            setLoading(true);
-            console.log("here");
-          } catch (error) {
-          } finally {
-            setLoading(false);
-          }
+          handleSubmit().catch(console.error);
         }}
       >
         <div className="flex gap-1 rounded-xl border border-solid border-gray-600 pl-4">
@@ -140,7 +161,10 @@ const Checkout: React.FC = () => {
           <input
             type="submit"
             value="Place Order"
-            className="flex rounded-xl border border-solid border-green-600 bg-green-600 px-16 py-4 text-white"
+            disabled={loading}
+            className={`flex rounded-xl border border-solid border-green-600 bg-green-600 px-16 py-4 text-white ${
+              loading ? "opacity-30" : ""
+            }`}
           />
         </div>
       </form>
