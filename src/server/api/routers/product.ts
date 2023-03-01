@@ -60,4 +60,35 @@ export const productRouter = createTRPCRouter({
       console.log(data);
       return data;
     }),
+  getProduct: publicProcedure
+    .input(
+      z.object({
+        product_id: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const url = new URL(
+        `https://sweet-apple-acres.netlify.app/.netlify/functions/api/products/${input.product_id}`
+      );
+
+      const response = await fetch(url);
+      console.log(response);
+      const zProductObject = {
+        id: z.string(),
+        name: z.string(),
+        description: z.string(),
+        image: z.string(),
+        price: z.number(),
+        rating: z.number(),
+        isAvailable: z.boolean(),
+      };
+      const zData = z.object({
+        ...zProductObject,
+        releated: z.array(z.object(zProductObject)),
+      });
+      const data = zData.parse(await response.json());
+
+      console.log(data);
+      return data;
+    }),
 });
