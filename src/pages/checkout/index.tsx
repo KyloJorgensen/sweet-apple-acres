@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import ProductQtyController from "~/components/ProductQtyController";
 import Nav from "~/components/Nav";
+import Footer from "~/components/Footer";
 import { api } from "~/utils/api";
 import { useAppContext } from "~/context/state";
 import { useState } from "react";
@@ -63,19 +64,20 @@ const Checkout: React.FC = () => {
 
   if (!(totalCartQty > 0)) {
     return (
-      <>
+      <div className="flex flex-col justify-center gap-12 text-center">
         <p>Oops there are no items in your cart. </p>
         <p>
           <Link href="/" className="text-blue-400 underline">
             Continue Shopping
           </Link>
         </p>
-      </>
+      </div>
     );
   }
 
   return (
     <>
+      <h2 className="text-2xl font-bold">Cart</h2>
       {productsQuery.error && (
         <code>{JSON.stringify(productsQuery.error, null, 2)}</code>
       )}
@@ -83,10 +85,10 @@ const Checkout: React.FC = () => {
         {products?.map((product, index) => (
           <div
             key={`${product.id}-${index}`}
-            className="flex flex-row items-center gap-10"
+            className="flex flex-col flex-wrap items-center justify-end gap-x-10 gap-y-2 sm:flex-row"
           >
             <Link
-              className="flex flex-row items-center justify-center gap-10"
+              className="flex w-full flex-grow flex-row items-center justify-between gap-10 sm:w-min"
               href={`/products/${product.id}`}
             >
               <Image
@@ -95,27 +97,41 @@ const Checkout: React.FC = () => {
                 width={50}
                 height={50}
               />
-              <p className="font-bold">{product.name}</p>
-              <p className="">${Number(product.price).toFixed(2)} /ea</p>
+              <p className="flex-grow">
+                <span className="font-bold">{product.name}</span>
+                <br />${Number(product.price).toFixed(2)} /ea
+              </p>
+              <p className="text-bold w-14 text-right sm:hidden">
+                $
+                {Number(
+                  product.price *
+                    (appContext?.sharedState?.cartProducts?.[product?.id]
+                      ?.quantity || 0)
+                ).toFixed(2)}
+              </p>
             </Link>
-            <div className="flex max-w-xs flex-grow justify-center">
-              <ProductQtyController
-                className={`flex-grow pb-4 ${
-                  product.isAvailable ? "" : "opacity-30"
-                }`}
-                productId={product.id}
-                isAvailable={product.isAvailable}
-                hideAddToCart
-              />
+            <div className="justify-right flex w-full flex-wrap-reverse items-center sm:w-max">
+              <div className="flex w-52 flex-grow justify-center">
+                <ProductQtyController
+                  className={`flex-grow ${
+                    product.isAvailable ? "" : "opacity-30"
+                  }`}
+                  productId={product.id}
+                  isAvailable={product.isAvailable}
+                  hideAddToCart
+                />
+              </div>
+              <p
+                className={`text-bold hidden w-14 text-right ${"sm:inline-block"}`}
+              >
+                $
+                {Number(
+                  product.price *
+                    (appContext?.sharedState?.cartProducts?.[product?.id]
+                      ?.quantity || 0)
+                ).toFixed(2)}
+              </p>
             </div>
-            <p className="text-bold">
-              $
-              {Number(
-                product.price *
-                  (appContext?.sharedState?.cartProducts?.[product?.id]
-                    ?.quantity || 0)
-              ).toFixed(2)}
-            </p>
           </div>
         ))}
       </div>
@@ -129,8 +145,8 @@ const Checkout: React.FC = () => {
           handleSubmit().catch(console.error);
         }}
       >
-        <div className="flex gap-1 rounded-xl border border-solid border-gray-600 pl-4">
-          <label htmlFor="name" className="py-4">
+        <div className="flex gap-1 pl-4">
+          <label htmlFor="name" className="py-4 w-36 text-right">
             Name:
           </label>
           <input
@@ -139,12 +155,13 @@ const Checkout: React.FC = () => {
             name="name"
             required
             value={name}
-            className="flex-grow rounded-r-xl pl-3"
+            placeholder="Josh Williams"
+            className="flex-grow border-b border-solid border-gray-600 px-3"
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="flex gap-1 rounded-xl border border-solid border-gray-600 pl-4">
-          <label htmlFor="deliveryAddress" className="py-4">
+        <div className="flex gap-1 pl-4">
+          <label htmlFor="deliveryAddress" className="py-4 w-36 text-right">
             Delivery Address:
           </label>
           <input
@@ -153,7 +170,8 @@ const Checkout: React.FC = () => {
             name="deliveryAddress"
             required
             value={deliveryAddress}
-            className="flex-grow rounded-r-xl pl-3"
+            placeholder="123 Main St. New York City, New York 10001"
+            className="flex-grow border-b border-solid border-gray-600 px-3"
             onChange={(e) => setDeliveryAddress(e.target.value)}
           />
         </div>
@@ -182,10 +200,10 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col ">
         <Nav hideCart />
-        <div className="mx-auto flex w-4/5 flex-col justify-center gap-12 px-4 pt-16">
-          <h2 className="text-2xl font-bold">Cart</h2>
+        <div className="container mx-auto flex flex-grow flex-col justify-center gap-12 px-4 pt-16 md:max-w-4xl">
           <Checkout />
         </div>
+        <Footer />
       </main>
     </>
   );

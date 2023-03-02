@@ -5,6 +5,7 @@ import Link from "next/link";
 import FiveStarRating from "~/components/FiveStarRating";
 import ProductQtyController from "~/components/ProductQtyController";
 import Nav from "~/components/Nav";
+import Footer from "~/components/Footer";
 import { api } from "~/utils/api";
 
 const ProductList: React.FC = () => {
@@ -63,12 +64,13 @@ const Home: NextPage = () => {
         <meta name="description" content="🍎 Sweet Apple Acres" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col ">
+      <main className="flex min-h-screen flex-col">
         <Nav />
-        <div className="mx-auto flex w-4/5 flex-col justify-center gap-12 px-4 pt-16">
+        <div className="container mx-auto flex flex-grow flex-col justify-center px-4 pt-16 md:max-w-4xl">
           <h2 className="text-2xl font-bold">Products</h2>
           <ProductList />
         </div>
+        <Footer />
       </main>
     </>
   );
