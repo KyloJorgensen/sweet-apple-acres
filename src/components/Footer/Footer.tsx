@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Link to GitHub Repo
+        GitHub Repository
       </a>
       </div>
     </footer>
